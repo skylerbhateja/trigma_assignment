@@ -6,6 +6,7 @@ import {
   LOGIN_SUCCESS,
 } from '../../common/redux/features/user/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const useLoginController = () => {
   const [email, setEmail] = useState('');
@@ -23,10 +24,14 @@ const useLoginController = () => {
 
   const onSubmit = async () => {
     try {
-      const res = await axiosInstance.post('login', {
-        email: email,
-        password: password,
-      });
+      //keep this in env
+      const res = await axios.post(
+        'https://apidummyadmin.trigma.in/api/auth/login',
+        {
+          email: email,
+          password: password,
+        },
+      );
       const {data} = res.data;
       await AsyncStorage.setItem('user', JSON.stringify(data));
       dispatch(LOGIN_SUCCESS(data));
